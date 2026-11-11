@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adhyayana Yoga – Prototyp</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Redesign-Prototyp für adhyayana-yoga.de – Yoga, MBSR und Meditation in Freiburg mit Manuela Heisler.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: editorial, asymmetrisch. Große Serifen-Typo neben echten Fotos; dunkle Waldgrün-Bänder als Kapiteltrenner; jede Seite hat einen eigenen Rhythmus. Alle Sektionen = spätere Gutenberg-Blöcke (data-block). */
+:root{
+  --elfenbein:#F5F2EA;   /* Grundfläche */
+  --creme:#ECE5D6;       /* Wechselband */
+  --stein:#C8BCA7;       /* Linien, ruhige Flächen */
+  --salbei:#8E9B80;      /* Akzent leise */
+  --salbei-hell:#DCE0D2; /* Tags, Hover */
+  --wald:#22362C;        /* Primär / dunkle Bänder */
+  --wald-2:#2E463A;
+  --erde:#7B5B41;        /* Akzent sparsam (Links, Kicker) */
+  --kohle:#22231F;       /* Text */
+  --kohle-2:#55574E;     /* Sekundärtext */
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Hanken Grotesk","Helvetica Neue",Arial,system-ui,sans-serif;
+  --gut:max(20px,env(safe-area-inset-left,0px));
+  --gut-r:max(20px,env(safe-area-inset-right,0px));
+  --w:1240px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--elfenbein);color:var(--kohle);font:400 17px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--erde);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:var(--w);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r)}
+.kicker{font:600 12px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--erde)}
+.on-dark .kicker{color:#C9B48F}
+.lead{font-family:var(--serif);font-size:clamp(21px,2.1vw,26px);line-height:1.45;font-weight:300}
+.muted{color:var(--kohle-2)}
+.num{font-variant-numeric:tabular-nums}
+
+/* --- Prototyp-Leiste (nicht Teil des Designs) --- */
+.protobar{background:var(--kohle);color:#E8E4DA;font:500 12px/1 var(--sans);letter-spacing:.04em}
+.protobar .wrap{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;padding-block:9px}
+.protobar button{font:inherit;background:transparent;color:inherit;border:1px solid #5a5a52;border-radius:2px;padding:6px 10px;cursor:pointer}
+.protobar button[aria-pressed="true"]{background:#E8E4DA;color:var(--kohle)}
+.protobar .grp{display:flex;gap:6px;flex-wrap:wrap}
+
+/* --- Gerätevorschau --- */
+#stage{transition:max-width .3s}
+body.mobile #stage{max-width:400px;margin:24px auto;border:10px solid var(--kohle);border-radius:34px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:var(--elfenbein)}
+body.mobile #stage .desk{display:none!important}
+body.mobile #stage .mob{display:flex!important}
+body.mobile #stage .split, body.mobile #stage .grid3, body.mobile #stage .grid2, body.mobile #stage .foot-grid, body.mobile #stage .hero{grid-template-columns:1fr!important}
+body.mobile #stage .hero-img{min-height:420px}
+body.mobile #stage h1{font-size:44px}
+body.mobile #stage .facts{grid-template-columns:1fr 1fr!important}body.mobile #stage .facts b{font-size:28px}body.mobile #stage .facts div:nth-child(3){padding-left:0;border-left:0}
+
+/* --- WordPress-Blockansicht --- */
+body.blocks [data-block]{position:relative;outline:1px dashed #B5793F;outline-offset:-1px}
+body.blocks [data-block]::before{content:"Block · " attr(data-block);position:absolute;z-index:5;top:6px;left:6px;font:600 11px/1 var(--sans);letter-spacing:.04em;background:#B5793F;color:#fff;padding:5px 7px;border-radius:2px}
+
+/* --- Kopf --- */
+.site-head{position:sticky;top:0;z-index:20;background:rgba(245,242,234,.94);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid rgba(200,188,167,.6)}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:76px}
+.logo{display:flex;flex-direction:column;text-decoration:none;line-height:1}
+.logo b{font:400 27px/1 var(--serif);letter-spacing:.01em}
+.logo span{font:500 10.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--kohle-2);margin-top:6px}
+.nav{display:flex;align-items:center;gap:28px}
+.nav a{font:500 15px/1 var(--sans);text-decoration:none;padding:8px 0;border-bottom:1px solid transparent}
+.nav a:hover,.nav a.active{border-color:var(--wald)}
+.nav .dd{position:relative}
+.nav .dd-menu{position:absolute;top:100%;left:-18px;background:var(--elfenbein);border:1px solid var(--stein);padding:12px 18px;display:none;flex-direction:column;gap:2px;min-width:230px}
+.nav .dd:hover .dd-menu,.nav .dd:focus-within .dd-menu{display:flex}
+.nav .dd-menu a{padding:8px 0;font-weight:400}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 14.5px/1 var(--sans);letter-spacing:.02em;text-decoration:none;padding:15px 22px;border:1px solid var(--wald);background:var(--wald);color:var(--elfenbein);cursor:pointer;border-radius:1px;transition:background .2s,color .2s}
+.btn:hover{background:var(--wald-2)}
+.btn.ghost{background:transparent;color:var(--wald)}
+.btn.ghost:hover{background:var(--wald);color:var(--elfenbein)}
+.on-dark .btn{background:var(--elfenbein);color:var(--wald);border-color:var(--elfenbein)}
+.on-dark .btn.ghost{background:transparent;color:var(--elfenbein)}
+.btn .arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+.textlink{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;color:var(--wald)}
+.on-dark .textlink{color:var(--elfenbein)}
+.mob{display:none!important}
+.burger{background:none;border:0;padding:10px;cursor:pointer;flex-direction:column;gap:6px}
+.burger i{display:block;width:24px;height:1.5px;background:var(--kohle)}
+.drawer{display:none;border-top:1px solid var(--stein);padding:10px var(--gut-r) 24px var(--gut)}
+.drawer.open{display:block}
+.drawer a{display:block;font:400 24px/1.2 var(--serif);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(200,188,167,.5)}
+.drawer a.sub{font:400 16px/1.2 var(--sans);padding-left:16px;color:var(--kohle-2)}
+
+/* --- Sektionen --- */
+section{padding-block:clamp(64px,9vw,120px)}
+.band-creme{background:var(--creme)}
+.on-dark{background:var(--wald);color:#EAE6DC}
+.on-dark .muted{color:#B9C0B2}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.split.wide-l{grid-template-columns:1.25fr 1fr}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,40px)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(24px,4vw,56px)}
+.stack{display:flex;flex-direction:column;gap:22px;min-width:0}
+.h2{font-size:clamp(34px,4.4vw,58px)}
+.h3{font-size:clamp(25px,2.4vw,32px)}
+.measure{max-width:62ch}
+figure{margin:0}
+figcaption{font:400 13px/1.4 var(--sans);color:var(--kohle-2);margin-top:10px}
+.photo{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.02)}
+.frame{overflow:hidden;background:var(--stein)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;min-height:min(86vh,820px)}
+.hero-txt{display:flex;flex-direction:column;justify-content:center;gap:30px;padding-block:72px;padding-left:max(var(--gut),calc((100vw - var(--w))/2 + 20px));padding-right:clamp(24px,5vw,72px)}
+.hero h1{font-size:clamp(46px,6.4vw,92px);font-weight:300}
+.hero h1 em{font-style:italic;color:var(--wald-2)}
+.hero-img{position:relative;min-height:520px}
+.hero-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:saturate(.8) contrast(1.03)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--kohle-2)}
+.hero-meta span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--salbei);margin-right:9px;vertical-align:2px}
+.sanskrit{font:italic 300 19px/1.4 var(--serif);color:var(--kohle-2)}
+
+/* Angebote */
+.offer{display:flex;flex-direction:column;gap:16px;text-decoration:none;min-width:0}
+.offer .frame{aspect-ratio:4/5}
+.offer img{transition:transform .6s ease}
+.offer:hover img{transform:scale(1.03)}
+.offer h3{font-size:28px}
+.offer .tag,.stack>.tag{align-self:flex-start}
+.offer .go{font-weight:600;font-size:14px;color:var(--wald)}
+.tag{display:inline-block;font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--salbei-hell);color:var(--wald);padding:6px 9px;border-radius:2px}
+
+/* Fünf Gewichtungen */
+.limbs{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(234,230,220,.25)}
+.limb{padding:28px 22px 6px 0;border-right:1px solid rgba(234,230,220,.18);display:flex;flex-direction:column;gap:10px;min-width:0}
+.limb:last-child{border-right:0}
+.limb:not(:first-child){padding-left:22px}
+.limb b{font:400 30px/1 var(--serif);font-style:italic;color:#fff}
+.limb small{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#C9B48F}
+.limb p{font-size:15px;color:#C8CEC2}
+
+/* Linie / Parampara */
+.lineage{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--stein)}
+.lineage div{padding:22px 18px 0 0;display:flex;flex-direction:column;gap:6px}
+.lineage .yr{font:500 13px/1 var(--sans);color:var(--erde)}
+.lineage b{font:400 24px/1.15 var(--serif)}
+.lineage .dot{width:11px;height:11px;border-radius:50%;background:var(--wald);margin-top:-28px;margin-bottom:14px}
+
+/* Termine */
+.events{border-top:1px solid var(--kohle)}
+.event{display:grid;grid-template-columns:150px 1fr auto;gap:24px;align-items:center;padding:24px 0;border-bottom:1px solid var(--stein)}
+.event .date{font:400 30px/1 var(--serif)}
+.event .date small{display:block;font:500 12px/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--kohle-2);margin-top:6px}
+.event h4{font-size:24px;margin-bottom:4px}
+.event p{font-size:15px;color:var(--kohle-2)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.filters button{font:500 14px/1 var(--sans);background:transparent;border:1px solid var(--stein);padding:10px 14px;cursor:pointer;border-radius:30px;color:var(--kohle)}
+.filters button[aria-pressed="true"]{background:var(--wald);border-color:var(--wald);color:var(--elfenbein)}
+
+/* Wochenplan */
+.week{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--stein)}
+.day{padding:24px;border-right:1px solid var(--stein);display:flex;flex-direction:column;gap:16px;min-width:0}
+.day:last-child{border-right:0}
+.day h4{font-size:26px}
+.slot{display:flex;flex-direction:column;gap:3px;padding-top:14px;border-top:1px solid rgba(200,188,167,.6)}
+.slot .t{font:600 15px/1 var(--sans)}
+.slot span{font-size:15px;color:var(--kohle-2)}
+
+/* Facts */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--stein);border-bottom:1px solid var(--stein)}
+.facts div{padding:24px 20px 24px 0;display:flex;flex-direction:column;gap:6px}
+.facts div+div{padding-left:20px;border-left:1px solid var(--stein)}
+.facts b{font:400 34px/1 var(--serif)}
+.facts span{font-size:14px;color:var(--kohle-2)}
+.on-dark .facts,.on-dark .facts div+div{border-color:rgba(234,230,220,.22)}
+.on-dark .facts span{color:#B9C0B2}
+
+/* Listen */
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.list li{padding:14px 0 14px 28px;border-bottom:1px solid var(--stein);position:relative}
+.list li::before{content:"";position:absolute;left:0;top:25px;width:14px;height:1px;background:var(--erde)}
+.on-dark .list li{border-color:rgba(234,230,220,.2)}
+details{border-bottom:1px solid var(--stein)}
+details summary{cursor:pointer;list-style:none;padding:22px 0;font:400 23px/1.25 var(--serif);display:flex;justify-content:space-between;gap:20px}
+details summary::after{content:"+";font-family:var(--sans);font-weight:300;font-size:26px;line-height:1}
+details[open] summary::after{content:"–"}
+details summary::-webkit-details-marker{display:none}
+details .body{padding-bottom:24px;color:var(--kohle-2);max-width:68ch}
+
+/* Zitat / Platzhalter */
+.quote{font:300 italic clamp(26px,3vw,40px)/1.3 var(--serif)}
+.placeholder{border:1px dashed var(--erde);padding:28px;display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,.35)}
+.placeholder b{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--erde)}
+
+/* Seitenkopf innen */
+.pagehead{padding-block:clamp(56px,7vw,96px) clamp(40px,5vw,64px)}
+.pagehead h1{font-size:clamp(44px,6vw,84px);font-weight:300}
+.crumbs{font-size:13px;color:var(--kohle-2);margin-bottom:22px}
+.crumbs a{text-decoration:none}
+.wideimg{height:clamp(260px,42vw,560px)}
+.wideimg img{object-position:center 40%}
+
+/* Formular */
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:flex;flex-direction:column;gap:7px;font:500 13px/1 var(--sans);letter-spacing:.04em}
+input,select,textarea{font:400 16px/1.4 var(--sans);padding:14px;border:1px solid var(--stein);background:#FBFAF6;color:var(--kohle);border-radius:1px;width:100%}
+textarea{min-height:140px;resize:vertical}
+.check{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400;letter-spacing:0;font-size:14px;line-height:1.45}
+.check input{width:auto;margin-top:3px}
+.ok{background:var(--salbei-hell);padding:18px;border-left:3px solid var(--wald)}
+
+/* Fuß */
+.foot{background:#1B2B23;color:#CFD3C8;padding-block:80px 40px;font-size:15px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.foot h4{font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#C9B48F;margin-bottom:18px}
+.foot a{text-decoration:none;display:block;padding:4px 0}
+.foot a:hover{color:#fff}
+.foot .big{font:300 34px/1.15 var(--serif);color:#fff}
+.foot .legal{margin-top:64px;padding-top:24px;border-top:1px solid rgba(207,211,200,.18);display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;font-size:13px;color:#98A093}
+.foot .legal a{display:inline}
+
+/* Seiten */
+.page{display:none}
+.page.on{display:block;animation:fade .45s ease}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+
+@media (max-width:960px){
+  .desk{display:none!important}.mob{display:flex!important}
+  .hero,.split,.split.wide-l,.grid2,.foot-grid{grid-template-columns:1fr}
+  .hero-img{min-height:440px;order:-1}
+  .hero-txt{padding-left:var(--gut);padding-right:var(--gut-r);padding-block:44px 64px}
+  .grid3{grid-template-columns:1fr}
+  .limbs{grid-template-columns:1fr 1fr}
+  .limb{border-right:0;padding-left:0!important;border-bottom:1px solid rgba(234,230,220,.18);padding-bottom:20px}
+  .lineage{grid-template-columns:1fr 1fr;row-gap:28px}
+  .facts{grid-template-columns:1fr 1fr!important}
+  .facts b{font-size:28px}
+  .facts div{min-width:0}
+  .facts div:nth-child(3){padding-left:0;border-left:0}
+  .week{grid-template-columns:1fr}
+  .day{border-right:0;border-bottom:1px solid var(--stein)}
+  .event{grid-template-columns:1fr;gap:10px}
+  form .row{grid-template-columns:1fr}
+}
+body.mobile #stage .limbs,body.mobile #stage .lineage{grid-template-columns:1fr 1fr}
+body.mobile #stage .week{grid-template-columns:1fr}
+body.mobile #stage .event{grid-template-columns:1fr;gap:10px}
+body.mobile #stage .hero-img{order:-1}
+body.mobile #stage .hero-txt{padding:40px 20px 56px}
+body.mobile #stage form .row{grid-template-columns:1fr}
+body.mobile #stage .site-head{position:sticky}
+</style>
+</head>
+<body>
+
+<div class="protobar">
+  <div class="wrap">
+    <span>Adhyayana · Redesign-Prototyp · Entwurf zur Abstimmung · Stand 11/2026</span>
+    <div class="grp">
+      <button type="button" id="b-desk" aria-pressed="true">Desktop</button>
+      <button type="button" id="b-mob" aria-pressed="false">Mobil</button>
+      <button type="button" id="b-blocks" aria-pressed="false">WordPress-Blöcke zeigen</button>
+    </div>
+  </div>
+</div>
+
+<div id="stage">
+
+<header class="site-head" data-block="Header (Template-Part)">
+  <div class="wrap">
+    <a class="logo" href="#start" aria-label="Adhyayana – Startseite"><b>Adhyayana</b><span>Yoga · Meditation · Achtsamkeit</span></a>
+    <nav class="nav desk" aria-label="Hauptnavigation">
+      <div class="dd"><a href="#yoga" data-nav="yoga">Yoga</a>
+        <div class="dd-menu">
+          <a href="#yoga">Yogakurse &amp; Wochenplan</a>
+          <a href="#yoga-anfaenger">Yoga für Anfänger</a>
+          <a href="#einzelunterricht">Einzelunterricht &amp; Yogatherapie</a>
+          <a href="#philosophie">Philosophie &amp; Yoga-Sutra</a>
+        </div></div>
+      <div class="dd"><a href="#mbsr" data-nav="mbsr">Achtsamkeit</a>
+        <div class="dd-menu">
+          <a href="#mbsr">MBSR 8-Wochen-Kurs</a>
+          <a href="#mbsr-pnt">Positive Neuroplastizität</a>
+        </div></div>
+      <a href="#ausbildung" data-nav="ausbildung">Ausbildung</a>
+      <a href="#manuela" data-nav="manuela">Über Manuela</a>
+      <a href="#termine" data-nav="termine">Termine</a>
+      <a class="btn" href="#kontakt" style="padding:12px 18px;border-bottom:1px solid var(--wald)">Kontakt</a>
+    </nav>
+    <button class="burger mob" id="burger" type="button" aria-label="Menü öffnen" aria-expanded="false"><i></i><i></i><i></i></button>
+  </div>
+  <div class="drawer" id="drawer">
+    <a href="#yoga">Yoga</a>
+    <a class="sub" href="#yoga-anfaenger">Yoga für Anfänger</a>
+    <a class="sub" href="#einzelunterricht">Einzelunterricht &amp; Yogatherapie</a>
+    <a class="sub" href="#philosophie">Philosophie &amp; Yoga-Sutra</a>
+    <a href="#mbsr">Achtsamkeit &amp; MBSR</a>
+    <a href="#ausbildung">Yogalehrer-Ausbildung</a>
+    <a href="#manuela">Über Manuela</a>
+    <a href="#termine">Termine</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= START ================= -->
+<div class="page" id="p-start">
+  <section class="hero" style="padding:0" data-block="Hero (Cover)">
+    <div class="hero-txt">
+      <p class="kicker">Zentrum für Yoga, Meditation &amp; Achtsamkeit · Freiburg-Wiehre</p>
+      <h1>Yoga, das sich <em>dir</em> anpasst. Nicht umgekehrt.</h1>
+      <p class="lead measure">Klassisches Yoga in der Tradition von T.&nbsp;Krishnamacharya, MBSR-Achtsamkeitskurse und eine Yogalehrer-Ausbildung in kleinen Gruppen. Persönlich begleitet von Manuela Heisler, die seit den 1980er-Jahren in Freiburg unterrichtet.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px">
+        <a class="btn" href="#yoga">Kurs finden <span class="arr">→</span></a>
+        <a class="btn ghost" href="#kontakt">Platz anfragen</a>
+      </div>
+      <div class="hero-meta"><span>Kleine Gruppen</span><span>Krankenkassen-Zuschuss möglich</span><span>Brombergstraße 33</span></div>
+    </div>
+    <figure class="hero-img frame">
+      <img src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/1.e-f-Einzelunterricht-Therapie-scaled.jpg" alt="Yogapraxis im Baum-Stand am Seeufer">
+    </figure>
+  </section>
+
+  <section data-block="Text + Zitat (Positionierung)">
+    <div class="wrap split wide-l">
+      <div class="stack">
+        <p class="kicker">Adhyayana</p>
+        <h2 class="h2">Der Name bedeutet Studium. Gemeint ist das Lernen an sich selbst.</h2>
+      </div>
+      <div class="stack">
+        <p class="measure">Für die einen ist Yoga ein Weg, Stress abzubauen, für andere eine Form von Training. Wieder andere suchen einen achtsameren Umgang mit sich selbst und der Welt oder einen Zugang zur eigenen Spiritualität.</p>
+        <p class="measure muted">Bei Adhyayana gibt es dafür keine Einheitsstunde. Die Praxis wird an Zeit, Ort, Lebenssituation und Körper angepasst, so wie es die Tradition des klassischen Yoga seit jeher vorsieht.</p>
+        <p class="sanskrit">adhyayana (Sanskrit): Studium, Lernen</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-creme" data-block="Angebots-Raster (Query Loop: Angebote)">
+    <div class="wrap stack" style="gap:48px">
+      <div class="split" style="align-items:end">
+        <div class="stack"><p class="kicker">Angebote</p><h2 class="h2">Wo möchtest du beginnen?</h2></div>
+        <p class="muted measure">Vier Wege in die Praxis. Alle finden im Kursraum in der Freiburger Wiehre statt, einige auch online oder auf Mallorca.</p>
+      </div>
+      <div class="grid3" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+        <a class="offer" href="#yoga"><div class="frame"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN9997-scaled.jpg" alt="Rückbeuge auf Felsen am Fluss"></div><span class="tag">Wöchentlich</span><h3>Yogakurse</h3><p class="muted">Für Anfänger, Wiedereinsteiger und Erfahrene. Fünf Termine pro Woche.</p><span class="go">Wochenplan ansehen →</span></a>
+        <a class="offer" href="#mbsr"><div class="frame"><img class="photo" loading="lazy" style="object-position:30% center" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2021/01/5.f-MBSR-Kurse-scaled-e15903114824621.jpg" alt="Sitzmeditation auf einem Stein am Wasser"></div><span class="tag">8 Wochen</span><h3>MBSR</h3><p class="muted">Stressbewältigung durch Achtsamkeit nach Jon Kabat-Zinn.</p><span class="go">Zum Kurs →</span></a>
+        <a class="offer" href="#ausbildung"><div class="frame"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/1-Yoga-auf-Mallorca-3-scaled.jpg" alt="Yogapraxis an der Küste Mallorcas"></div><span class="tag">200 Stunden</span><h3>Yogalehrer-Ausbildung</h3><p class="muted">Freiburg und Mallorca, maximal 10 Teilnehmende.</p><span class="go">Zur Ausbildung →</span></a>
+        <a class="offer" href="#einzelunterricht"><div class="frame"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN0011-scaled-e1590333033671.jpg" alt="Dehnung auf Felsen im Flussbett" style="object-position:60% center"></div><span class="tag">1 : 1</span><h3>Einzelunterricht</h3><p class="muted">Eine Praxis, die genau zu dir und deinem Alltag passt.</p><span class="go">Mehr erfahren →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section data-block="Medien + Text (Über Manuela)">
+    <div class="wrap split">
+      <figure>
+        <div class="frame" style="aspect-ratio:4/5"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCF3764-Portr%C3%A4it.jpg" alt="Porträt Manuela Heisler" style="object-position:center 25%"></div>
+        <figcaption>Manuela Heisler, Gründerin von Adhyayana</figcaption>
+      </figure>
+      <div class="stack">
+        <p class="kicker">Deine Lehrerin</p>
+        <h2 class="h2">„Für mich war Yoga nie ein berufliches Ziel. Es war einfach mein eigener Weg.“</h2>
+        <p class="measure">Manuela Heisler ist Diplom-Sportlehrerin, Tanz- und Bewegungstherapeutin, Yogalehrerin BDY/EYU und zertifizierte MBSR-Lehrerin. Seit 1988 lernt sie bei R.&nbsp;Sriram, Schüler von T.&nbsp;Krishnamacharya und T.K.V.&nbsp;Desikachar.</p>
+        <div class="facts" style="grid-template-columns:repeat(3,1fr)">
+          <div><b class="num">35</b><span>Jahre Unterrichts­erfahrung</span></div>
+          <div><b class="num">1988</b><span>Beginn des Studiums bei R.&nbsp;Sriram</span></div>
+          <div><b>KHYF</b><span>Zertifikat als Ausbilderin</span></div>
+        </div>
+        <div><a class="textlink" href="#manuela">Manuelas Weg lesen</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-dark" data-block="Fünf-Spalten (Die Praxis)">
+    <div class="wrap stack" style="gap:48px">
+      <div class="split" style="align-items:end">
+        <div class="stack"><p class="kicker">Die Praxis</p><h2 class="h2">Fünf Elemente. Jede Stunde gewichtet sie anders.</h2></div>
+        <p class="muted measure">Je nach Gruppe, Jahreszeit und Situation verschiebt sich der Schwerpunkt. So bleibt die Praxis lebendig und passt zu den Menschen im Raum.</p>
+      </div>
+      <div class="limbs">
+        <div class="limb"><small>Körper</small><b>Asana</b><p>Dynamische und statische Haltungen für Beweglichkeit, Kraft und Gleichgewicht.</p></div>
+        <div class="limb"><small>Atem</small><b>Pranayama</b><p>Den Atem wahrnehmen, verlängern, vertiefen und verfeinern.</p></div>
+        <div class="limb"><small>Studium</small><b>Svadhyaya</b><p>Philosophische Texte des Yoga verstehen und in den Alltag übertragen.</p></div>
+        <div class="limb"><small>Klang</small><b>Mantra</b><p>Silben und kurze Texte rezitieren. Die Stimme führt den Atem.</p></div>
+        <div class="limb"><small>Stille</small><b>Dhyanam</b><p>Meditation mit und ohne Thema. Klarheit, Gelassenheit, Freude.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-block="Medien + Text (MBSR-Teaser)">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="kicker">Achtsamkeit · MBSR</p>
+        <h2 class="h2">Acht Wochen, die deinen Umgang mit Stress verändern können.</h2>
+        <p class="measure">Das MBSR-Programm wurde von Prof. Jon Kabat-Zinn an der University of Massachusetts entwickelt und ist wissenschaftlich gut untersucht. Angeleitete Meditation, sanftes Yoga, Body Scan und Austausch in einer Gruppe von höchstens 10 Personen.</p>
+        <div class="facts" style="grid-template-columns:repeat(3,1fr)">
+          <div><b class="num">8</b><span>Abende à 2,5 Std. + Achtsamkeitstag</span></div>
+          <div><b class="num">320 €</b><span>Krankenkassen-Zuschuss möglich</span></div>
+          <div><b class="num">13.01.</b><span>Nächster Kursstart (online)</span></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#mbsr">MBSR-Kurs ansehen <span class="arr">→</span></a></div>
+      </div>
+      <figure class="frame" style="aspect-ratio:5/4"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/Wuestesitzen-e1590307429623.jpg" alt="Meditation im Sitzen vor hellem Hintergrund" style="object-position:30% center"></figure>
+    </div>
+  </section>
+
+  <section class="band-creme" style="padding:0" data-block="Cover mit Text (Ausbildung-Teaser)">
+    <div class="split" style="gap:0;align-items:stretch">
+      <figure class="frame" style="min-height:480px"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN8127-scaled.jpg" alt="Übung auf den Küstenfelsen Mallorcas" style="object-position:40% center"></figure>
+      <div class="stack" style="padding:clamp(48px,7vw,96px) var(--gut-r) clamp(48px,7vw,96px) clamp(24px,5vw,80px);justify-content:center">
+        <p class="kicker">Yogalehrer-Ausbildung 2026/27</p>
+        <h2 class="h2">200 Stunden. Zehn Menschen. Eine Woche am Meer.</h2>
+        <p class="measure">Die Ausbildung folgt dem Curriculum des Yogaweg nach R.&nbsp;Sriram. Praxis kommt vor Theorie, und die Intensivtage finden auf Mallorca statt.</p>
+        <ul class="list measure">
+          <li>November 2026 bis Juni 2027, Wochenenden in Freiburg</li>
+          <li>Intensivtage Mallorca: 4. bis 9. Februar 2027</li>
+          <li>2.490 €, Ratenzahlung möglich</li>
+        </ul>
+        <div><a class="btn" href="#ausbildung">Zur Ausbildung <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-block="Linie / Zeitstrahl (Tradition)">
+    <div class="wrap stack" style="gap:44px">
+      <div class="split" style="align-items:end">
+        <div class="stack"><p class="kicker">Parampara</p><h2 class="h2">Eine Lehre, die von Lehrer zu Schüler weitergegeben wird.</h2></div>
+        <p class="muted measure">Adhyayana steht in einer direkten Linie der Weitergabe. Daher kommt die Haltung, jede Praxis dem einzelnen Menschen anzupassen.</p>
+      </div>
+      <div class="lineage">
+        <div><span class="dot"></span><span class="yr">1888–1989</span><b>T. Krishnamacharya</b><span class="muted">Lehrer vieler bekannter Yogameister des 20. Jahrhunderts</span></div>
+        <div><span class="dot"></span><span class="yr">Sohn &amp; Schüler</span><b>T.K.V. Desikachar</b><span class="muted">verbreitete die Lehre weltweit</span></div>
+        <div><span class="dot"></span><span class="yr">seit 1988 in Deutschland</span><b>R. Sriram</b><span class="muted">überträgt die Tradition als „Yogaweg“</span></div>
+        <div><span class="dot" style="background:var(--erde)"></span><span class="yr">seit 1988 Schülerin</span><b>Manuela Heisler</b><span class="muted">unterrichtet im Yogaweg in Freiburg</span></div>
+      </div>
+      <div><a class="textlink" href="#philosophie">Mehr über Philosophie und Yoga-Sutra</a></div>
+    </div>
+  </section>
+
+  <section class="band-creme" data-block="Testimonials (Pattern)">
+    <div class="wrap split">
+      <div class="stack"><p class="kicker">Stimmen</p><h2 class="h2">Was Teilnehmende sagen</h2><p class="muted measure">Dieser Bereich bleibt im Entwurf bewusst leer, bis echte, freigegebene Rückmeldungen vorliegen. Wir erfinden keine Zitate.</p></div>
+      <div class="placeholder"><b>Platzhalter · Inhalt folgt</b><p class="quote" style="color:var(--kohle-2)">Hier steht ein echtes Zitat einer Teilnehmerin, mit Vorname und Kurs.</p><p class="muted" style="font-size:14px">Vorschlag: 3 bis 5 Stimmen aus Ausbildung, MBSR und Yogakursen per E-Mail einholen, schriftliche Einwilligung dokumentieren.</p></div>
+    </div>
+  </section>
+
+  <section data-block="Termine (Query Loop: Kurs-Termine)">
+    <div class="wrap stack" style="gap:40px">
+      <div class="split" style="align-items:end">
+        <div class="stack"><p class="kicker">Als Nächstes</p><h2 class="h2">Kommende Termine</h2></div>
+        <div><a class="textlink" href="#termine">Alle Termine</a></div>
+      </div>
+      <div class="events" id="events-home"></div>
+    </div>
+  </section>
+
+  <section class="on-dark" data-block="CTA-Band">
+    <div class="wrap split">
+      <h2 class="h2">Nicht sicher, welcher Kurs passt? Lass uns kurz sprechen.</h2>
+      <div class="stack">
+        <p class="measure">Vor MBSR und Ausbildung ist ein Vorgespräch ausdrücklich erwünscht, und auch bei allen anderen Fragen hilft ein kurzer Austausch.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="btn" href="#kontakt">Nachricht schreiben <span class="arr">→</span></a><span class="btn ghost num" style="cursor:text;user-select:all">0174 678 83 06</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= YOGA ================= -->
+<div class="page" id="p-yoga">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / Yoga</p><h1>Yogakurse in Freiburg</h1></div>
+      <p class="lead">Kleine Gruppen, individuelle Korrektur und eine Praxis, die sich nach dir richtet. Für Anfänger, Wiedereinsteiger und Erfahrene.</p>
+    </div>
+  </section>
+  <div class="wrap" data-block="Bild breit"><figure class="frame wideimg"><img class="photo" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/5.d-Yoga-f.Erfahrene-und-Fortgeschrittenen.jpg" alt="Yogahaltung am Strand im Morgenlicht"></figure></div>
+
+  <section data-block="Wochenplan (Kurs-Termine)">
+    <div class="wrap stack" style="gap:40px">
+      <div class="split" style="align-items:end">
+        <div class="stack"><p class="kicker">Wochenplan · ab 05.10.2026</p><h2 class="h2">Fünf Termine pro Woche</h2></div>
+        <p class="muted measure">Alle Kurse finden in Präsenz im Kursraum Brombergstraße 33 statt. Quereinstieg ist möglich.</p>
+      </div>
+      <div class="week">
+        <div class="day"><h4>Montag</h4>
+          <div class="slot"><span class="t num">17:15 – 18:45</span><span>Erfahrene</span></div>
+          <div class="slot"><span class="t num">19:00 – 20:30</span><span>Vinyasa</span></div></div>
+        <div class="day"><h4>Dienstag</h4>
+          <div class="slot"><span class="t num">08:30 – 09:45</span><span>Zazen · 2 × 30 Min. Sitzen, 10 Min. Kinhin</span></div>
+          <div class="slot"><span class="t num">10:00 – 11:30</span><span>Anfänger &amp; Wiedereinsteiger</span></div>
+          <div class="slot"><span class="t num">19:15 – 20:45</span><span>Erfahrene / Vinyasa</span></div></div>
+        <div class="day"><h4>Mittwoch</h4>
+          <div class="slot"><span class="t num">18:30 – 20:00</span><span>Wiedereinsteiger &amp; Erfahrene</span></div></div>
+      </div>
+      <div class="facts">
+        <div><b class="num">160 €</b><span>10 Termine</span></div>
+        <div><b class="num">100 €</b><span>Studenten-Abo, 10 Termine</span></div>
+        <div><b class="num">18 €</b><span>Einzelstunde im Kurs</span></div>
+        <div><b class="num">5 €</b><span>Zazen, Unkostenbeitrag</span></div>
+      </div>
+      <p class="muted" style="font-size:14px">Krankenkassen-Zuschuss möglich. Weitere Ermäßigungen auf Anfrage.</p>
+      <div><a class="btn" href="#kontakt">Platz anfragen <span class="arr">→</span></a></div>
+    </div>
+  </section>
+
+  <section class="band-creme" id="yoga-anfaenger" data-block="Medien + Text (Anfänger)">
+    <div class="wrap split">
+      <figure class="frame" style="aspect-ratio:4/5"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2018/02/06.jpg" alt="Tulpen im hellen Kursraum"><figcaption style="padding:0 0 0 0"></figcaption></figure>
+      <div class="stack">
+        <p class="kicker">Yoga für Anfänger</p>
+        <h2 class="h2">Der erste Schritt darf leicht sein.</h2>
+        <p class="measure">Dienstagvormittag, höchstens acht Teilnehmende. Jede Stunde enthält individuelle Begleitung, Korrektur und Austausch. Vorkenntnisse brauchst du keine.</p>
+        <ul class="list measure">
+          <li>Innehalten und unmittelbar wahrnehmen</li>
+          <li>Achtsamer Umgang mit dem eigenen Körper</li>
+          <li>Stress reduzieren und bewältigen</li>
+          <li>Selbstwertgefühl und Selbstmitgefühl stärken</li>
+        </ul>
+        <p class="muted">Dienstag 10:00 – 11:30 · seit 23.09.2026 · 10 Termine 160 €</p>
+        <div><a class="btn" href="#kontakt">Termin anfragen <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-block="Akkordeon (Häufige Fragen)">
+    <div class="wrap split" style="align-items:start">
+      <div class="stack"><p class="kicker">Gut zu wissen</p><h2 class="h2">Häufige Fragen</h2></div>
+      <div>
+        <details open><summary>Welcher Kurs passt zu mir?</summary><div class="body">Wenn du neu bist oder länger pausiert hast, beginne am Dienstagvormittag. Mit Erfahrung passen die Abendkurse. Im Zweifel klären wir das in einem kurzen Gespräch.</div></details>
+        <details><summary>Kann ich mitten im Kurs einsteigen?</summary><div class="body">Ja, ein Quereinstieg ist möglich. Die Details klären wir bei der Anmeldung.</div></details>
+        <details><summary>Wie funktioniert der Krankenkassen-Zuschuss?</summary><div class="body">Du erhältst nach dem Kurs eine Teilnahmebescheinigung, die du bei deiner Krankenkasse einreichst. Wie hoch der Zuschuss ist, legt deine Kasse fest.</div></details>
+        <details><summary>Gibt es auch Einzelstunden?</summary><div class="body">Ja. Im Kurs kostet eine Einzelstunde 18 €. Individuellen Einzelunterricht findest du <a class="textlink" href="#einzelunterricht">hier</a>.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-dark" data-block="Verweis-Karten">
+    <div class="wrap grid2">
+      <a class="offer" href="#einzelunterricht" style="color:inherit"><span class="kicker">Einzelunterricht</span><h3 class="h3">Eine Praxis nur für dich, auch als Yogatherapie.</h3><span class="textlink">Mehr erfahren</span></a>
+      <a class="offer" href="#philosophie" style="color:inherit"><span class="kicker">Philosophie</span><h3 class="h3">Yoga-Sutra und Bhagavad Gita im Kontext deines Alltags.</h3><span class="textlink">Zur Studiengruppe</span></a>
+    </div>
+  </section>
+</div>
+
+<!-- ================= MBSR ================= -->
+<div class="page" id="p-mbsr">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / Achtsamkeit</p><h1>MBSR in Freiburg</h1></div>
+      <p class="lead">Stressbewältigung durch Achtsamkeit: der 8-Wochen-Kurs nach Jon Kabat-Zinn, geleitet von einer zertifizierten MBSR-Lehrerin.</p>
+    </div>
+  </section>
+  <div class="wrap" data-block="Bild breit"><figure class="frame wideimg"><img class="photo" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2021/01/5.f-MBSR-Kurse-scaled-e15903114824621.jpg" alt="Sitzmeditation am Fluss" style="object-position:25% 40%"></figure></div>
+
+  <section data-block="Text zweispaltig">
+    <div class="wrap split" style="align-items:start">
+      <h2 class="h2">Eine andere Haltung zu Stress.</h2>
+      <div class="stack">
+        <p>MBSR ist ein achtwöchiges Achtsamkeitstraining. Seine Basis ist die Schulung der Achtsamkeit im Alltag und in der Stille. Ziel ist, Stress dauerhaft zu reduzieren, Selbstwert und Selbstakzeptanz zu stärken und heilsamer mit schwierigen Gedanken und Gefühlen umzugehen.</p>
+        <p class="muted">Das Programm entstand in den 1970er-Jahren an der Universitätsklinik von Massachusetts und wird heute weltweit in Kliniken, Gesundheitszentren und im Kontext von Yoga und Meditation angeboten.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-creme" data-block="Zwei Listen">
+    <div class="wrap grid2">
+      <div class="stack"><p class="kicker">Kursinhalte</p>
+        <ul class="list"><li>Achtsamkeitsübungen im Sitzen, Liegen und Gehen</li><li>Sanfte Yoga- und Körperübungen</li><li>Atem-Achtsamkeit und Body Scan</li><li>Meditationen mit unterschiedlichem Fokus</li><li>Erforschen als Werkzeug, Austausch in der Gruppe</li></ul></div>
+      <div class="stack"><p class="kicker">Was Teilnehmende üben</p>
+        <ul class="list"><li>Stresssignale früher wahrnehmen</li><li>Entspannungsfähigkeit und Konzentration entwickeln</li><li>Selbstvertrauen und Selbstakzeptanz stärken</li><li>Selbstfürsorge im Alltag</li><li>Voraussetzung: täglich 20 bis 30 Minuten Übung zu Hause</li></ul></div>
+    </div>
+  </section>
+
+  <section data-block="Kurs-Karten (Kurs-Termine)">
+    <div class="wrap stack" style="gap:40px">
+      <div class="stack"><p class="kicker">Termine &amp; Preis</p><h2 class="h2">Zwei Kursformate</h2></div>
+      <div class="grid2">
+        <div class="stack" style="border-top:1px solid var(--kohle);padding-top:24px">
+          <span class="tag">läuft · Präsenz</span>
+          <h3 class="h3">Donnerstagabend · Herbst 2026</h3>
+          <p class="num">15.10. bis 10.12.2026 · 8 Abende<br>Achtsamkeitstag: So, 08.11.2026, 10–16 Uhr</p>
+          <p class="muted">Dieser Kurs hat bereits begonnen.</p>
+        </div>
+        <div class="stack" style="border-top:1px solid var(--kohle);padding-top:24px">
+          <span class="tag">Anmeldung offen · Online</span>
+          <h3 class="h3">Mittwochvormittag · Winter 2027</h3>
+          <p class="num">13.01. bis 17.03.2027 · 10:00–12:30<br>13.01. · 20.01. · 27.01. · 17.02. · 24.02. · 03.03. · 10.03. · 17.03.</p>
+          <p class="muted">Achtsamkeitstag: Termin im März (wird bestätigt)</p>
+        </div>
+      </div>
+      <div class="facts" style="grid-template-columns:repeat(3,1fr)"><div><b class="num">320 €</b><span>8 Termine + Achtsamkeitstag</span></div><div><b class="num">max. 10</b><span>Teilnehmende</span></div><div><b>Zuschuss</b><span>Krankenkasse, Studierenden-Ermäßigung</span></div></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#kontakt">Vorgespräch vereinbaren <span class="arr">→</span></a></div>
+    </div>
+  </section>
+
+  <section class="on-dark" id="mbsr-pnt" data-block="Medien + Text (PNT)">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="kicker">Vertiefung · Positive Neuroplastizität</p>
+        <h2 class="h2">Gute Erfahrungen in bleibende innere Stärken verwandeln.</h2>
+        <p class="measure">Das Positive Neuroplastizitäts-Training (PNT) basiert auf der Forschung und Konzeption von Rick Hanson. In drei Tagen lernst du, flüchtige positive Erfahrungen bewusst aufzunehmen, damit Ressourcen wie Gelassenheit, Selbstvertrauen und Mitgefühl wachsen. Yoga und Meditation unterstützen den Lernprozess.</p>
+        <p class="muted">Manuela Heisler ist Facilitatorin und Trainerin für PNT. Nächster Termin auf Anfrage.</p>
+        <div><a class="btn" href="#kontakt">Interesse melden <span class="arr">→</span></a></div>
+      </div>
+      <figure class="frame" style="aspect-ratio:4/5"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2022/02/im-Mohnfeld-scaled.jpg" alt="Person in einem Mohnfeld unter weitem Himmel"></figure>
+    </div>
+  </section>
+</div>
+
+<!-- ================= AUSBILDUNG ================= -->
+<div class="page" id="p-ausbildung">
+  <section class="hero" style="padding:0" data-block="Hero (Cover)">
+    <div class="hero-txt">
+      <p class="crumbs"><a href="#start">Start</a> / Ausbildung</p>
+      <p class="kicker">Yogalehrer-Ausbildung · Modul I · 2026/27</p>
+      <h1>Unterrichten lernen, indem du <em>übst</em>.</h1>
+      <p class="lead measure">200 Stunden in Freiburg und auf Mallorca, nach dem Curriculum des Yogaweg von R.&nbsp;Sriram. Leitung: Manuela Heisler.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="btn" href="#kontakt">Vorgespräch vereinbaren <span class="arr">→</span></a><a class="btn ghost" href="#ausb-termine">Termine ansehen</a></div>
+    </div>
+    <figure class="hero-img frame"><img src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/1-Yoga-auf-Mallorca-3-scaled.jpg" alt="Yogapraxis an der Küste Mallorcas" style="object-position:55% center"></figure>
+  </section>
+
+  <section data-block="Kennzahlen">
+    <div class="wrap facts">
+      <div><b class="num">200 h</b><span>Ausbildungsumfang</span></div>
+      <div><b class="num">max. 10</b><span>Teilnehmende</span></div>
+      <div><b class="num">9–10</b><span>Monate gemeinsamer Prozess</span></div>
+      <div><b class="num">2.490 €</b><span>Ratenzahlung möglich</span></div>
+    </div>
+  </section>
+
+  <section class="band-creme" data-block="Text + Liste (Curriculum)">
+    <div class="wrap split" style="align-items:start">
+      <div class="stack">
+        <p class="kicker">Curriculum</p>
+        <h2 class="h2">Hatha Yoga und das Yoga-Sutra des Patanjali</h2>
+        <p class="measure">Die Ausbildung ist handlungs- und erfahrungsorientiert. In ihrem Verlauf entsteht ein yogischer Prozess, der dich, die Gruppe und die Leitung einschließt. Probestunden sind vorab möglich.</p>
+        <figure style="max-width:320px;margin-top:12px"><div class="frame" style="aspect-ratio:3/4"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2024/07/IMG_1457-Zertifikat-rotated-e1722514992613.jpg" alt="Teilnehmerin mit ihrem 200-Stunden-Zertifikat"></div><figcaption>Abschluss 2024: Teilnehmerin mit 200-h-Zertifikat</figcaption></figure>
+      </div>
+      <div>
+        <details open><summary>Philosophie &amp; Texte</summary><div class="body">Der achtgliedrige Pfad, Bhagavad Gita, Hatha-Yoga Pradipika und zentrale Yoga-Konzepte.</div></details>
+        <details><summary>Asana &amp; Stundenaufbau</summary><div class="body">Grundformen von rund 50 Asanas und der Aufbau von Yogastunden.</div></details>
+        <details><summary>Atem, Meditation, Entspannung</summary><div class="body">Pranayama, Meditations- und Entspannungsformen, Atemarbeit.</div></details>
+        <details><summary>Bandhas, Mudras &amp; Mantren</summary><div class="body">Energetische Techniken und Rezitation in der Tradition.</div></details>
+        <details><summary>Abschluss</summary><div class="body">Zertifikat Yogalehrer/in nach dem Curriculum des Yogaweg.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="ausb-termine" data-block="Termin-Liste">
+    <div class="wrap split" style="align-items:start">
+      <div class="stack"><p class="kicker">Termine</p><h2 class="h2">November 2026 bis Juni 2027</h2><p class="muted measure">Wochenenden in Freiburg, dazu sechs Intensivtage auf Mallorca (alternativ in Freiburg). Flug und Unterkunft sind nicht enthalten, wir machen gern Vorschläge.</p></div>
+      <div class="events">
+        <div class="event"><div class="date num">21./22.11.<small>2026</small></div><div><h4>Auftaktwochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">12./13.12.<small>2026</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">09./10.01.<small>2027</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">04.–09.02.<small>2027</small></div><div><h4>Intensivtage</h4><p>Mallorca oder ersatzweise Freiburg</p></div></div>
+        <div class="event"><div class="date num">27./28.02.<small>2027</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">06./07.03.<small>2027</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">24./25.04.<small>2027</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">08./09.05.<small>2027</small></div><div><h4>Abschluss</h4><p>Freiburg</p></div></div>
+        <div class="event"><div class="date num">05./06.06.<small>2027</small></div><div><h4>Wochenende</h4><p>Freiburg</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="on-dark" data-block="CTA-Band">
+    <div class="wrap split">
+      <h2 class="h2">Der erste Schritt ist ein Gespräch.</h2>
+      <div class="stack"><p class="measure">Wir sprechen über deine Erfahrung, deine Erwartungen und ob die Ausbildung zu dir passt. Unverbindlich, persönlich oder am Telefon.</p><div><a class="btn" href="#kontakt">Vorgespräch anfragen <span class="arr">→</span></a></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= EINZELUNTERRICHT ================= -->
+<div class="page" id="p-einzelunterricht">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / <a href="#yoga">Yoga</a> / Einzelunterricht</p><h1>Einzelunterricht &amp; Yogatherapie</h1></div>
+      <p class="lead">Die ursprünglichste Form, Yoga zu unterrichten: eine Praxis, die für dich entwickelt wird.</p>
+    </div>
+  </section>
+  <section style="padding-top:0" data-block="Medien + Text">
+    <div class="wrap split">
+      <figure class="frame" style="aspect-ratio:4/5"><img class="photo" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN9997-scaled.jpg" alt="Yogahaltung auf einem Felsen am Fluss"></figure>
+      <div class="stack">
+        <p class="measure">In der Tradition von Krishnamacharya entfaltet Yoga seine Wirkung besonders gut, wenn die Übungspraxis zu den Wünschen und Möglichkeiten des Übenden passt. Je nach Situation bekommt der Einzelunterricht auch therapeutische Bedeutung.</p>
+        <p class="measure muted">Grundlage dafür sind intensive Weiterbildung und Supervision, jahrelange eigene Praxis und die Kenntnis von Kontraindikationen. Prinzipien aus Yoga und Ayurveda werden einbezogen.</p>
+        <p class="kicker" style="margin-top:12px">So läuft es ab</p>
+        <ol class="list measure" style="counter-reset:s">
+          <li>Bestandsaufnahme und Gespräch über Voraussetzungen und Ziele</li>
+          <li>Prioritäten setzen</li>
+          <li>Zusammenstellung deines Übungsprogramms aus Asana, Pranayama und Vinyasa</li>
+          <li>Grafische Übersicht deiner Praxis für das Üben zu Hause</li>
+        </ol>
+        <div class="facts" style="grid-template-columns:1fr 1fr"><div><b class="num">90 Min.</b><span>pro Einheit</span></div><div><b class="num">90 €</b><span>nach Vereinbarung</span></div></div>
+        <div><a class="btn" href="#kontakt">Termin vereinbaren <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+  <section class="band-creme" data-block="Text zweispaltig (Firmen)">
+    <div class="wrap split">
+      <h2 class="h3">Für Unternehmen: Training im Betrieb oder im Zentrum in der Wiehre</h2>
+      <div class="stack"><p class="measure muted">Achtsamkeit und Yoga für Teams und Führungskräfte. Inhalte und Umfang stimmen wir individuell ab.</p><div><a class="textlink" href="#kontakt">Angebot anfragen</a></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= PHILOSOPHIE ================= -->
+<div class="page" id="p-philosophie">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / <a href="#yoga">Yoga</a> / Philosophie</p><h1>Philosophie &amp; Yoga-Sutra</h1></div>
+      <p class="lead">Für alle, die Yoga nicht als Wellness verstehen, sondern als Weg, der Fragen stellt.</p>
+    </div>
+  </section>
+  <section style="padding-top:0" data-block="Text + Bild">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="measure">Texte wie das Yoga-Sutra des Patanjali, einzelne Upanishaden, die Yoga-Rahasya oder die Bhagavad Gita werden kompakt vermittelt, gemeinsam studiert und auf ihre Bedeutung für unseren Alltag geprüft.</p>
+        <p class="measure muted">Jede Einheit verbindet das Textstudium mit einer Asana-, Atem- und Meditationspraxis, die sich an den Aussagen orientiert. So entsteht Verständnis aus eigener Erfahrung.</p>
+        <div class="facts" style="grid-template-columns:repeat(3,1fr)"><div><b class="num">4 ×</b><span>im Jahr, samstags</span></div><div><b class="num">5 Std.</b><span>pro Termin</span></div><div><b class="num">30 €</b><span>pro Termin</span></div></div>
+        <div><a class="btn" href="#kontakt">Zur Studiengruppe anmelden <span class="arr">→</span></a></div>
+      </div>
+      <figure class="frame" style="aspect-ratio:4/5"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN2134-scaled-e1591718550441.jpg" alt="Meditation im Sitzen am Wasser"></figure>
+    </div>
+  </section>
+  <section class="on-dark" data-block="Zitat">
+    <div class="wrap"><p class="quote measure" style="max-width:28ch">Eine Yoga-Praxis muss immer der Zeit, dem Ort, der Situation, den Aktivitäten und dem Körper angepasst werden.</p><p class="muted" style="margin-top:20px">Grundsatz der Tradition, wie er bei Adhyayana gelehrt wird</p></div>
+  </section>
+</div>
+
+<!-- ================= MANUELA ================= -->
+<div class="page" id="p-manuela">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / Über Manuela</p><h1>Manuela Heisler</h1></div>
+      <p class="lead">Yogalehrerin BDY/EYU, Ausbilderin und MBSR-Lehrerin. Seit 35 Jahren unterrichtet sie Yoga und Meditation in Freiburg und auf Mallorca.</p>
+    </div>
+  </section>
+  <section style="padding-top:0" data-block="Medien + Text (Biografie)">
+    <div class="wrap split" style="align-items:start">
+      <figure><div class="frame" style="aspect-ratio:3/4"><img class="photo" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCF3764-Portr%C3%A4it.jpg" alt="Porträt Manuela Heisler" style="object-position:center 20%"></div></figure>
+      <div class="stack">
+        <p class="quote">„Schon als Kinder spielten wir im Garten Buddha und probierten Yoga-Haltungen aus.“</p>
+        <p class="measure">Ihr Weg begann mit einem Yoga-Bilderbuch und begleitete sie durch das Sport- und Pädagogikstudium in Freiburg und Köln. Als Prüfungsthema wählte sie eine Yogastunde, die ihren Kommilitonen die Prüfungsangst nehmen sollte.</p>
+        <p class="measure">Nach dem Studium wollte sie ein Jahr nach Indien. Stattdessen übernahm sie eine Kursvertretung, und daraus wurde eine Lern- und Lehrreise, die sie Ende der 1980er-Jahre zu R.&nbsp;Sriram führte. Bei ihm nimmt sie bis heute Einzelunterricht, Supervision und Weiterbildung wahr.</p>
+        <p class="measure muted">„Diese Erfahrungen zu teilen, Leid verringern zu helfen und die positiven Wirkungen zu erleben, sind die Grundlagen meines Yogawegs.“</p>
+      </div>
+    </div>
+  </section>
+  <section class="band-creme" data-block="Liste (Qualifikationen)">
+    <div class="wrap split" style="align-items:start">
+      <div class="stack"><p class="kicker">Ausbildung &amp; Qualifikation</p><h2 class="h2">Was hinter dem Unterricht steht</h2></div>
+      <ul class="list">
+        <li>Diplom-Sportlehrerin sowie Tanz- und Bewegungstherapeutin (DSHS Köln)</li>
+        <li>Lehrer-Zertifizierung BDY (Berufsverband der Yogalehrenden) / EYU (Europäische Yoga Union)</li>
+        <li>Zertifikat als Yoga-Teacher-Trainer der KHYF Chennai (Krishnamacharya Healing Yoga Foundation)</li>
+        <li>Zertifizierte MBSR-Lehrerin, Mitglied im MBSR-MBCT Verband</li>
+        <li>Facilitatorin für Positives Neuroplastizitäts-Training nach Rick Hanson</li>
+        <li>Kinder- und Jugendpädagogin (Montessori)</li>
+        <li>Lehrerin im Yogaweg, seit 1988 Schülerin von R.&nbsp;Sriram</li>
+      </ul>
+    </div>
+  </section>
+  <section data-block="Galerie">
+    <div class="wrap stack" style="gap:28px">
+      <p class="kicker">Aus der Praxis</p>
+      <div class="grid3">
+        <figure><div class="frame" style="aspect-ratio:4/3"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2022/09/IMG_9040-scaled.jpg" alt="Gruppe bei Übungen im Garten eines Seminarhauses"></div><figcaption>Yogatherapie-Ausbildung mit R. Sriram, Berlin 2022 (als Assistenz)</figcaption></figure>
+        <figure><div class="frame" style="aspect-ratio:4/3"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN8127-scaled.jpg" alt="Yoga an der Küste Mallorcas"></div><figcaption>Intensivtage auf Mallorca</figcaption></figure>
+        <figure><div class="frame" style="aspect-ratio:4/3"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2020/05/DSCN0252-scaled-e1590700346132.jpg" alt="Alter Holzsteg im Meer"></div><figcaption>Mallorca</figcaption></figure>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= TERMINE ================= -->
+<div class="page" id="p-termine">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap split wide-l" style="align-items:end">
+      <div class="stack"><p class="crumbs"><a href="#start">Start</a> / Termine</p><h1>Termine &amp; Kurse</h1></div>
+      <p class="lead">Kursstarts, Seminare und Ausbildungstermine auf einen Blick. Die wöchentlichen Yogakurse findest du im <a class="textlink" href="#yoga">Wochenplan</a>.</p>
+    </div>
+  </section>
+  <section style="padding-top:0" data-block="Termin-Archiv mit Filter (Kurs-Termine)">
+    <div class="wrap">
+      <div class="filters" role="group" aria-label="Termine filtern">
+        <button type="button" data-f="alle" aria-pressed="true">Alle</button>
+        <button type="button" data-f="MBSR" aria-pressed="false">MBSR</button>
+        <button type="button" data-f="Ausbildung" aria-pressed="false">Ausbildung</button>
+        <button type="button" data-f="Yoga" aria-pressed="false">Yoga</button>
+      </div>
+      <div class="events" id="events-all"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= KONTAKT ================= -->
+<div class="page" id="p-kontakt">
+  <section class="pagehead" data-block="Seitenkopf">
+    <div class="wrap"><p class="crumbs"><a href="#start">Start</a> / Kontakt</p><h1>Schön, dass du da bist.</h1></div>
+  </section>
+  <section style="padding-top:0" data-block="Formular + Kontaktdaten">
+    <div class="wrap split" style="align-items:start">
+      <form id="kform" class="stack" novalidate>
+        <div class="row"><label for="f-name">Name<input id="f-name" name="name" required autocomplete="name"></label><label for="f-mail">E-Mail<input id="f-mail" name="mail" type="email" required autocomplete="email"></label></div>
+        <label for="f-int">Ich interessiere mich für
+          <select id="f-int" name="interesse"><option>Yogakurs / Probestunde</option><option>Yoga für Anfänger</option><option>MBSR 8-Wochen-Kurs</option><option>Yogalehrer-Ausbildung</option><option>Einzelunterricht / Yogatherapie</option><option>Philosophie / Yoga-Sutra</option><option>Positive Neuroplastizität</option><option>Etwas anderes</option></select></label>
+        <label for="f-msg">Nachricht<textarea id="f-msg" name="nachricht" placeholder="Erzähl mir kurz, was du suchst."></textarea></label>
+        <label class="check" for="f-dsgvo"><input id="f-dsgvo" type="checkbox" required> Ich bin einverstanden, dass meine Angaben zur Beantwortung meiner Anfrage verwendet werden (Datenschutzerklärung).</label>
+        <div><button class="btn" type="submit">Nachricht senden <span class="arr">→</span></button></div>
+        <p id="f-ok" class="ok" hidden>Prototyp: Das Formular ist nur eine Ansicht und versendet nichts. Auf der fertigen Website erhältst du hier eine Bestätigung.</p>
+      </form>
+      <div class="stack" style="gap:30px">
+        <div class="stack" style="gap:6px"><p class="kicker">Kursraum</p><p class="h3">Brombergstraße 33<br>79102 Freiburg-Wiehre</p></div>
+        <div class="stack" style="gap:6px"><p class="kicker">Telefon</p><p class="h3 num" style="user-select:all">0174 678 83 06</p></div>
+        <div class="stack" style="gap:6px"><p class="kicker">E-Mail</p><p class="h3" style="user-select:all">info@adhyayana-yoga.de</p></div>
+        <figure class="frame" style="aspect-ratio:3/2"><img class="photo" loading="lazy" src="https://www-static.adhyayana-yoga.de/wp-content/uploads/2018/02/06.jpg" alt="Heller Kursraum mit Tulpen"></figure>
+        <p class="muted" style="font-size:14px">Newsletter: Neue Kurse und Seminare per E-Mail.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer class="foot" data-block="Footer (Template-Part)">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="stack" style="gap:16px"><p class="big">Adhyayana</p><p>Zentrum für Yoga, Meditation &amp; Achtsamkeit<br>Brombergstraße 33 · 79102 Freiburg</p><p class="num">0174 678 83 06<br>info@adhyayana-yoga.de</p></div>
+      <div><h4>Angebote</h4><a href="#yoga">Yogakurse</a><a href="#yoga-anfaenger">Yoga für Anfänger</a><a href="#mbsr">MBSR 8-Wochen-Kurs</a><a href="#ausbildung">Yogalehrer-Ausbildung</a><a href="#einzelunterricht">Einzelunterricht</a></div>
+      <div><h4>Adhyayana</h4><a href="#manuela">Über Manuela</a><a href="#philosophie">Philosophie</a><a href="#termine">Termine</a><a href="#kontakt">Kontakt</a></div>
+      <div><h4>Folgen</h4><a href="https://www.facebook.com/AdhyayanaYoga/" target="_blank" rel="noopener">Facebook</a><a href="https://www.youtube.com/channel/UCWJ2BU6oSIhacZddwNmoCAQ" target="_blank" rel="noopener">YouTube</a><a href="#kontakt">Newsletter</a></div>
+    </div>
+    <div class="legal"><span>© Adhyayana Yoga · Manuela Heisler</span><span><a href="#kontakt">Impressum</a> · <a href="#kontakt">Datenschutz</a></span></div>
+  </div>
+</footer>
+</div>
+
+<script>
+// Termine: im fertigen WordPress ein eigener Beitragstyp "Kurs-Termin" (Titel, Datum, Kategorie, Ort, Preis, Status)
+const EVENTS=[
+ {d:'21./22.11.',y:'2026',cat:'Ausbildung',t:'Yogalehrer-Ausbildung: Auftakt',p:'Freiburg · 200 h bis Juni 2027 · 2.490 €',href:'#ausbildung'},
+ {d:'jeden Di',y:'laufend',cat:'Yoga',t:'Yoga für Anfänger',p:'10:00–11:30 · max. 8 Personen · Quereinstieg möglich',href:'#yoga-anfaenger'},
+ {d:'13.01.',y:'2027',cat:'MBSR',t:'MBSR 8-Wochen-Kurs, online',p:'Mittwochs 10:00–12:30 · 320 €',href:'#mbsr'},
+ {d:'04.–09.02.',y:'2027',cat:'Ausbildung',t:'Intensivtage Mallorca',p:'Teil der Yogalehrer-Ausbildung',href:'#ausbildung'},
+ {d:'auf Anfrage',y:'2027',cat:'MBSR',t:'Positive Neuroplastizität (PNT)',p:'3-Tageskurs nach Rick Hanson',href:'#mbsr-pnt'},
+ {d:'4 × jährlich',y:'Samstags',cat:'Yoga',t:'Yoga-Sutra-Studiengruppe',p:'5 Stunden · 30 € pro Termin',href:'#philosophie'}
+];
+function row(e){return `<div class="event"><div class="date num">${e.d}<small>${e.y}</small></div><div><span class="tag" style="margin-bottom:8px">${e.cat}</span><h4>${e.t}</h4><p>${e.p}</p></div><a class="btn ghost" href="${e.href}">Details</a></div>`}
+document.getElementById('events-home').innerHTML=EVENTS.slice(0,4).map(row).join('');
+function renderAll(f){document.getElementById('events-all').innerHTML=EVENTS.filter(e=>f==='alle'||e.cat===f).map(row).join('')}
+renderAll('alle');
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderAll(b.dataset.f)}));
+
+// Routing per Hash (im Prototyp); Anker-Unterseiten zeigen ihre Elternseite
+const ANCH={'yoga-anfaenger':'yoga','mbsr-pnt':'mbsr','ausb-termine':'ausbildung'};
+function route(){
+  let h=(location.hash||'#start').slice(1); let page=ANCH[h]||h;
+  if(!document.getElementById('p-'+page)){page='start';h='start'}
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+page));
+  document.querySelectorAll('.nav [data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===page));
+  document.getElementById('drawer').classList.remove('open');document.getElementById('burger').setAttribute('aria-expanded','false');
+  const t=ANCH[h]?document.getElementById(h):null;
+  if(t){setTimeout(()=>t.scrollIntoView({block:'start'}),30)}else{window.scrollTo(0,0)}
+  const titles={start:'Adhyayana – Yoga, MBSR & Meditation in Freiburg',yoga:'Yogakurse Freiburg | Adhyayana',mbsr:'MBSR Freiburg | 8-Wochen-Kurs | Adhyayana',ausbildung:'Yogalehrer-Ausbildung Freiburg | Adhyayana',einzelunterricht:'Einzelunterricht & Yogatherapie Freiburg | Adhyayana',philosophie:'Yoga-Philosophie & Yoga-Sutra | Adhyayana',manuela:'Manuela Heisler | Adhyayana',termine:'Termine | Adhyayana',kontakt:'Kontakt | Adhyayana'};
+  document.title=titles[page]||document.title;
+}
+addEventListener('hashchange',route);route();
+
+document.getElementById('burger').addEventListener('click',e=>{const d=document.getElementById('drawer');d.classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',d.classList.contains('open'))});
+document.getElementById('kform').addEventListener('submit',e=>{e.preventDefault();document.getElementById('f-ok').hidden=false});
+
+// Prototyp-Leiste
+const bD=document.getElementById('b-desk'),bM=document.getElementById('b-mob'),bB=document.getElementById('b-blocks');
+bD.onclick=()=>{document.body.classList.remove('mobile');bD.setAttribute('aria-pressed','true');bM.setAttribute('aria-pressed','false')};
+bM.onclick=()=>{document.body.classList.add('mobile');bM.setAttribute('aria-pressed','true');bD.setAttribute('aria-pressed','false')};
+bB.onclick=()=>{const on=document.body.classList.toggle('blocks');bB.setAttribute('aria-pressed',on)};
+</script>
+</body>
+</html>
